@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Digilangues — Diagnostic IA des besoins linguistiques</title>
+<link rel="icon" href="data:," />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<div class="page">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">Digi<span class="brand-mark-accent">langues</span></span>
+      <span class="brand-tag">Centre de formation linguistique BtoB · Qualiopi</span>
+    </div>
+
+    <ol class="steps" id="steps">
+      <li class="step" data-step="form">
+        <span class="step-index">1</span>
+        <span class="step-label">Profil</span>
+      </li>
+      <span class="step-connector"></span>
+      <li class="step" data-step="result">
+        <span class="step-index">2</span>
+        <span class="step-label">Diagnostic</span>
+      </li>
+    </ol>
+  </header>
+
+  <main class="stage">
+
+    <!-- ============ STEP 1 — FORM ============ -->
+    <section class="view view-form" id="view-form">
+
+      <div class="intro">
+        <p class="eyebrow">Outil interne — Conseil pédagogique</p>
+        <h1>Diagnostic IA des besoins linguistiques</h1>
+        <p class="intro-text">
+          Renseignez le profil de votre équipe. Notre conseiller pédagogique génère instantanément
+          un programme de formation sur-mesure, calibré sur le Cadre Européen Commun de Référence
+          pour les Langues.
+        </p>
+      </div>
+
+      <div class="panel form-panel">
+        <form id="diagnostic-form" novalidate>
+
+          <div class="field">
+            <label for="secteur">Secteur d'activité</label>
+            <input
+              type="text"
+              id="secteur"
+              name="secteur"
+              placeholder="Ex. Cabinet d'avocats, cosmétique, industrie pharmaceutique…"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="taille_equipe">Taille de l'équipe concernée</label>
+            <input
+              type="text"
+              id="taille_equipe"
+              name="taille_equipe"
+              placeholder="Ex. 1 personne, équipe de 6, 40 collaborateurs…"
+              required
+            />
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="langue_cible">Langue cible</label>
+              <select id="langue_cible" name="langue_cible" required>
+                <option value="" disabled selected>Choisir…</option>
+                <option value="Anglais">Anglais</option>
+                <option value="Espagnol">Espagnol</option>
+                <option value="Allemand">Allemand</option>
+                <option value="Portugais">Portugais</option>
+                <option value="Français Langue Étrangère (FLE)">Français Langue Étrangère (FLE)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="niveau_actuel">Niveau CECRL actuel</label>
+              <select id="niveau_actuel" name="niveau_actuel" required>
+                <option value="" disabled selected>Choisir…</option>
+                <option value="A1">A1 — Débutant</option>
+                <option value="A2">A2 — Élémentaire</option>
+                <option value="B1">B1 — Intermédiaire</option>
+                <option value="B2">B2 — Intermédiaire avancé</option>
+                <option value="C1">C1 — Avancé</option>
+                <option value="C2">C2 — Maîtrise</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="objectif">Objectif principal de la formation</label>
+            <textarea
+              id="objectif"
+              name="objectif"
+              rows="4"
+              placeholder="Ex. Négocier avec des clients anglophones, préparer une certification interne, animer des réunions internationales…"
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn-primary">
+            <span class="btn-label">Générer le diagnostic</span>
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <p id="form-error" class="form-error" role="alert" hidden></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ TRANSITION — LOADING ============ -->
+    <section class="view view-loading" id="view-loading" hidden>
+      <div class="loading-ring" aria-hidden="true">
+        <span class="loading-ring-dot"></span>
+      </div>
+      <p class="loading-title">Élaboration de votre programme</p>
+      <p class="loading-status" id="loading-status">Analyse du profil linguistique…</p>
+    </section>
+
+    <!-- ============ STEP 2 — RESULT ============ -->
+    <section class="view view-result" id="view-result" hidden>
+
+      <div class="recap-bar" id="recap-bar" aria-label="Profil soumis"></div>
+
+      <article class="panel report-panel">
+
+        <p class="result-eyebrow">Programme recommandé par Digilangues</p>
+        <h2 id="result-title" class="result-title"></h2>
+
+        <div class="cecrl-track" role="img" aria-label="Progression CECRL">
+          <div class="cecrl-scale">
+            <span data-level="A1">A1</span>
+            <span data-level="A2">A2</span>
+            <span data-level="B1">B1</span>
+            <span data-level="B2">B2</span>
+            <span data-level="C1">C1</span>
+            <span data-level="C2">C2</span>
+          </div>
+          <div class="cecrl-bar">
+            <div class="cecrl-bar-fill" id="cecrl-fill"></div>
+            <div class="cecrl-marker cecrl-marker-current" id="cecrl-current-marker">
+              <span class="cecrl-marker-dot"></span>
+              <span class="cecrl-marker-label">Actuel</span>
+            </div>
+            <div class="cecrl-marker cecrl-marker-target" id="cecrl-target-marker">
+              <span class="cecrl-marker-dot"></span>
+              <span class="cecrl-marker-label">Visé</span>
+            </div>
+          </div>
+        </div>
+
+        <dl class="result-grid">
+          <div class="result-item">
+            <dt>Format</dt>
+            <dd id="result-format"></dd>
+          </div>
+          <div class="result-item">
+            <dt>Rythme hebdomadaire</dt>
+            <dd id="result-rythme"></dd>
+          </div>
+          <div class="result-item">
+            <dt>Durée estimée</dt>
+            <dd id="result-duree"></dd>
+          </div>
+        </dl>
+
+        <div class="result-justification">
+          <h3>Justification pédagogique</h3>
+          <p id="result-justification"></p>
+        </div>
+
+        <div class="result-actions">
+          <button type="button" id="btn-edit" class="btn-ghost">← Modifier ce profil</button>
+          <div class="result-actions-right">
+            <button type="button" id="btn-print" class="btn-secondary">Imprimer</button>
+            <button type="button" id="btn-restart" class="btn-primary btn-primary-sm">Nouveau diagnostic</button>
+          </div>
+        </div>
+
+      </article>
+
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Digilangues — Formation linguistique en entreprise · Visio &amp; présentiel · Certifié Qualiopi</p>
+  </footer>
+
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
