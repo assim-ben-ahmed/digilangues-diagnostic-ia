@@ -1,31 +1,38 @@
-# Digilangues — Diagnostic IA des besoins linguistiques
+# Digilangues: AI Language-Needs Diagnostic
 
-Démo locale : un client professionnel renseigne le profil linguistique de son équipe, et l'outil
-génère en direct — via l'API Mistral — un programme de formation sur-mesure (niveau
-CECRL visé, format, rythme, durée, justification pédagogique).
+A local demo where a business client describes their team's language profile, and the tool uses the Mistral API to generate a tailored training programme on the spot: target CEFR level, format, weekly schedule, duration and a pedagogical rationale.
 
-## Lancer le projet en local
+<!-- TODO: screenshot of the form + generated diagnostic -->
 
-### 1. Créer et configurer le fichier `.env`
+## Why
+
+For a B2B language-training provider like Digilangues, the first step with any new client is a needs assessment: understanding the team's sector, size, current level and goal, then proposing a realistic programme. This prototype shows how an LLM can turn that short intake form into a structured, CEFR-aligned first proposal in seconds. A training advisor can then review and refine it, instead of writing it from scratch.
+
+<!-- TODO: add context if relevant (e.g. built for an application / case study for Digilangues) -->
+
+## How it works
+
+- **Frontend** (`static/`): a single page with a form (sector, team size, target language, current CEFR level, goal) that renders the result.
+- **Backend** (`main.py`): FastAPI exposes `POST /api/diagnostic`, validates the input, and calls `https://api.mistral.ai/v1/chat/completions` with a system prompt that enforces realistic progression (one sub-level to one full CEFR level) and a strict JSON schema.
+- The API key is read server-side with `python-dotenv` and is never exposed to the browser.
+- The UI and the generated programme are in French.
+
+## Run locally
+
+### 1. Configure `.env`
 
 ```bash
 cp .env.example .env
 ```
 
-Puis ouvrir `.env` et renseigner votre clé API Mistral (console.mistral.ai) :
+Add your Mistral API key (from [console.mistral.ai](https://console.mistral.ai/)):
 
 ```
 MISTRAL_API_KEY=...
 MISTRAL_MODEL=mistral-small-latest
 ```
 
-La clé n'est jamais exposée côté frontend : elle est lue côté serveur (FastAPI) via
-`python-dotenv`, et toutes les requêtes vers Mistral transitent par le backend (appel HTTP direct
-vers `https://api.mistral.ai/v1/chat/completions`).
-
-### 2. Installer les dépendances
-
-Créez un environnement virtuel (recommandé), puis installez les dépendances :
+### 2. Install dependencies
 
 ```bash
 python -m venv .venv
@@ -35,28 +42,29 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 3. Lancer le serveur
+### 3. Start the server
 
 ```bash
 uvicorn main:app --reload
 ```
 
-### 4. Ouvrir l'application
+### 4. Open the app
 
-Rendez-vous sur [http://localhost:8000](http://localhost:8000), remplissez le formulaire
-(secteur, taille d'équipe, langue cible, niveau CECRL actuel, objectif) et cliquez sur
-**Générer le diagnostic**.
+Go to [http://localhost:8000](http://localhost:8000), fill in the form and click **Générer le diagnostic**.
 
-## Structure du projet
+## Project structure
 
 ```
-digilangues/
-├── main.py              # Application FastAPI + endpoint POST /api/diagnostic
-├── .env.example          # Modèle de fichier d'environnement
+digilangues-diagnostic-ia/
+├── main.py           # FastAPI app + POST /api/diagnostic
+├── .env.example      # Environment template
 ├── requirements.txt
-├── static/
-│   ├── index.html        # Page unique (formulaire + rendu du résultat)
-│   ├── style.css          # Design bleu nuit / accent ambré
-│   └── script.js           # Logique formulaire + appel API + rendu CECRL
-└── README.md
+└── static/
+    ├── index.html    # Single page (form + result)
+    ├── style.css     # Navy / amber design
+    └── script.js     # Form logic, API call, CEFR rendering
 ```
+
+## Stack
+
+Python · FastAPI · Mistral API · vanilla HTML/CSS/JS
